@@ -1,0 +1,11 @@
+protobuf==4.25.5
+langchain==0.3.13 #��K�͌��ꃂ�f���̗��p���ȑf������t���[�����[�N�B�`���b�g�{�b�g�A���≞���V�X�e���A�f�[�^���o�Ȃǂ̃A�v���P�[�V�������\�z���邽�߂̃c�[�����
+langchain_community==0.3.13 #LangChain�̃G�R�V�X�e�����ŃR�~���j�e�B���񋟂���ǉ��̃c�[���ⓝ����񋟁B������LangChain���C�u�����Ɋ܂܂�Ȃ������I�ȋ@�\��T�[�h�p�[�e�B�̓������܂܂��
+langchain_experimental=0.3.4
+langchain_openai==0.2.14
+langchain_core==0.3.28 #LangChain�̊�{�I�ȃR���|�[�l���g��񋟁BLangChain�̊j�ƂȂ�@�\�⒊�ۉ����܂܂�Ă��܂�
+langchain-chroma==0.14 #Chroma�Ƃ����x�N�g���f�[�^�x�[�X��LangChain�𓝍����邽�߂̃p�b�P�[�W
+tiktoken==0.8.0 #OpenAI�ɂ���ĊJ�����ꂽ�g�[�N�������C�u�����B����OpenAI�̃��f���Ŏg�p�����g�[�N���̃G���R�[�h/�f�R�[�h�������I�ɍs��
+sentence-transformers==3.3.1 #�����x���̖��ߍ��݃x�N�g���𐶐����邽�߂̃��C�u�����B���ɁA���R���ꏈ���^�X�N�Ŏg�p�����
+chromadb==0.5..23 #���ߍ��݃x�N�g����ۑ����A�������邽�߂̃f�[�^�x�[�X�BRAG�ɍœK
+pandas==2.2.3

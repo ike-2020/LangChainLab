@@ -1,0 +1,14 @@
+[Paths]
+chrome_user_data_dir= 'server not use
+chromedriver_path= 'server not use
+log_output_path=/app/log/python/
+url_input_path=/app/lib/python/ 'server not use
+data_output_path=D:\work\git\ReadNewspaperNikkei\data\result\
+img_file_description=/app/lib/python/result/img/
+img_output_path=img\
+data_read_path=/app/lib/python/result/
+html_template_path=/app/lib/python/template/article_template.html
+article_figure_size=1000
+html_output_path=/app/lib/python/html/
+database_info=postgresql://articleuser:3939@db:5432/articledb?client_encoding=utf8
+src_path=/app/src/python
