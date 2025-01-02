@@ -3,10 +3,10 @@ import argparse
 from pathlib import Path
 sys.path.append('src/python')
 from util.PropertyManager import PropertyManager
-from ragprocessing.RAGPersistenceHandler import RAGPersistenceHandler
+from rag.processing.RAGPersistenceHandler import RAGPersistenceHandler
 
 from db.base.ArticleRAGLoader import ArticleRAGLoader
-from documentprocessing.SingletonRetriever import SingletonRetriever
+from rag.document.SingletonRetriever import SingletonRetriever
 
 
 class RagExecutor:
@@ -23,7 +23,7 @@ class RagExecutor:
         return retriever
     
     @staticmethod
-    def load_saved_rag(persist_dir: str = "chroma_db"):
+    def load_saved_rag(persist_dir: str = PropertyManager().persist_dir):
         # 保存されたRAGシステムを読み込む
         persistence_handler = RAGPersistenceHandler(persist_dir)
         return persistence_handler.load_rag_system("sentence-transformers/all-MiniLM-L6-v2")

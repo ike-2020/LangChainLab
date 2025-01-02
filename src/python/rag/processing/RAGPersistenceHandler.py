@@ -3,7 +3,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from typing import Optional
 
-from documentprocessing.SingletonRetriever import SingletonRetriever
+from rag.document.SingletonRetriever import SingletonRetriever
 
 class RAGPersistenceHandler:
     def __init__(self, persist_directory: str = "chroma_db"):
