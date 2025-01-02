@@ -2,6 +2,7 @@ from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_core.retrievers import BaseRetriever
 
 class SingletonRetriever:
     _instance = None
@@ -29,8 +30,11 @@ class SingletonRetriever:
 
     def setup_retriever(self):
         db = Chroma.from_documents(self.chunked_documents, self.embeddings)
-        self.retriever = db.as_retriever()
+        self.retriever: BaseRetriever = db.as_retriever()
 
-    def get_retriever(self):
+    def get_retriever(self) -> BaseRetriever:
         return self.retriever
+    
+    def set_retriever(self,object) -> BaseRetriever:
+        self.retriever = object
 

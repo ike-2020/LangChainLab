@@ -9,7 +9,7 @@ import os
 #propertyから各種値を取得する
 class PropertyManager:
     def __init__(self):
-        self.config_file_path = os.getenv('PYTHON_CONFIG_FILE')
+        self.config_file_path = os.getenv('PYTHON_CONFIG_FILE_LANG_CHAIN')
 
     @property
     def database_info(self):
@@ -24,6 +24,7 @@ class PropertyManager:
         if persist_dir:
             return persist_dir
         return ''
+
 
     def _get_property(self, section, option):
         config = configparser.ConfigParser()

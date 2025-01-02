@@ -10,6 +10,7 @@ from rag.document.SingletonRetriever import SingletonRetriever
 
 
 class RagExecutor:
+    manager = PropertyManager()
     @staticmethod
     def initialize_rag(persist_dir: str = "chroma_db"):
         # RAGシステムを初期化して保存
@@ -23,12 +24,13 @@ class RagExecutor:
         return retriever
     
     @staticmethod
-    def load_saved_rag(persist_dir: str = PropertyManager().persist_dir):
+    def load_saved_rag(persist_dir: str = manager.persist_dir):
         # 保存されたRAGシステムを読み込む
         persistence_handler = RAGPersistenceHandler(persist_dir)
         return persistence_handler.load_rag_system("sentence-transformers/all-MiniLM-L6-v2")
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser(description='RAG System Management')
     parser.add_argument('--mode', choices=['initialize', 'load'], required=True,
                        help='initialize: Create and save new RAG system, load: Load existing RAG system')

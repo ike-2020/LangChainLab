@@ -43,9 +43,19 @@ class RAGPersistenceHandler:
         
         # SingletonRetrieverのインスタンスを作成
         retriever = SingletonRetriever.__new__(SingletonRetriever)
+        #retriever = SingletonRetriever.get_retriever()
         retriever._initialized = True
         retriever.embeddings = embeddings
-        retriever.retriever = db.as_retriever()
+
+
+        retriever.chunked_documents = db.get()
+        if not retriever.chunked_documents:
+            print("Warning: No documents found in the database")
+            retriever.chunked_documents = []
+            
+        # retrieverの設定
+        #retriever.retriever = db.as_retriever()
+        retriever.set_retriever(db.as_retriever())
         
         print("RAG system loaded successfully")
         return retriever
