@@ -18,6 +18,13 @@ class PropertyManager:
             return database_info
         return ''
 
+    @property
+    def persist_dir(self):
+        persist_dir = self._get_property("Paths", "persist_dir")
+        if persist_dir:
+            return persist_dir
+        return ''
+
     def _get_property(self, section, option):
         config = configparser.ConfigParser()
         try:

@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from util.util import PropertyManager
+from util.PropertyManager import PropertyManager
 
 class SingletonDatabase:
     _instance = None

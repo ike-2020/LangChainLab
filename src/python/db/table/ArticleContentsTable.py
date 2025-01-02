@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Text,func
 from sqlalchemy.dialects.postgresql import TSVECTOR
 from db.base.ArticleTableBase import ArticleTableBase
-from util.util import PropertyManager
+from util.PropertyManager import PropertyManager
 
 
 class ArticleContentsTable(ArticleTableBase):

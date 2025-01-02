@@ -3,6 +3,8 @@ from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from typing import Optional
 
+from documentprocessing.SingletonRetriever import SingletonRetriever
+
 class RAGPersistenceHandler:
     def __init__(self, persist_directory: str = "chroma_db"):
         self.persist_directory = persist_directory
@@ -16,8 +18,10 @@ class RAGPersistenceHandler:
             persist_directory=self.persist_directory
         )
         
-        # ドキュメントを保存
-        db.add_documents(retriever_instance.chunked_documents)
+        batch_size = 5000  # 必要に応じて調整
+        for i in range(0, len(retriever_instance.chunked_documents), batch_size):
+            batch = retriever_instance.chunked_documents[i:i + batch_size]
+            db.add_documents(batch)
         db.persist()
         
         print(f"RAG system saved to {self.persist_directory}")

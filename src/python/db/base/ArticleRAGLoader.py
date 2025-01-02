@@ -1,6 +1,4 @@
-#from langchain_community.document_loaders import DataFrameLoader
-from langchain_community.document_loaders import SQLDatabaseLoader        
-#import pandas as pd
+from langchain_community.document_loaders import SQLDatabaseLoader
 from sqlalchemy import text
 from langchain.schema import Document
 from db.table.ArticleHeaderTable import ArticleHeaderTable
@@ -38,6 +36,7 @@ class ArticleRAGLoader:
                  END, 
                  h.edition_no        
         """
+        ## WHERE h.article_date between '20231212' and '20231212' デバッグ用(上に追加)        
 
         with engine.connect() as connection:
             result = connection.execute(text(query_str))
