@@ -1,6 +1,7 @@
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 from langchain_community.llms import OpenAI
+from langchain_openai import ChatOpenAI
 import sys
 import os
 sys.path.append('src/python')
@@ -8,43 +9,48 @@ from rag.processing.RagExecutor import RagExecutor
 
 class RAGPrompt:
     def __init__(self, retriever_instance):
-        # Retrieverのインスタンスをクラスに保存
-        #self.retriever = retriever_instance.retriever
         self.retriever = retriever_instance.get_retriever()
         
-        # LLMの初期化
-        self.llm = OpenAI(temperature=0, openai_api_key=os.getenv("OPENAI_API_KEY"))
+        
+        self.llm = ChatOpenAI(
+            temperature=0,
+            model_name="gpt-3.5-turbo-16k",
+            openai_api_key=os.getenv("OPENAI_API_KEY")
+        )
         
         # QAチェーンの作成
         self.qa = RetrievalQA.from_chain_type(
-            llm=self.llm, 
-            chain_type="stuff", 
+            llm=self.llm,
+            chain_type="stuff",
             retriever=self.retriever,
-            return_source_documents=True,  # ソースドキュメントを返すように設定
+            return_source_documents=True,
             verbose=True
         )
 
     def print_retriever_info(self):
         """Retrieverの情報を表示"""
-        print("\n=== Retriever情報 ===")
-        print(f"Retriever type: {type(self.retriever)}")
-        print(f"Search kwargs: {self.retriever.search_kwargs}")
-        # ChromaDBの情報を取得
-        if hasattr(self.retriever, '_collection'):
-            print(f"Collection name: {self.retriever._collection.name}")
-            print(f"Total documents: {self.retriever._collection.count()}")
+        return
+        # print("\n=== Retriever情報 ===")
+        # print(f"Retriever type: {type(self.retriever)}")
+        # print(f"Search kwargs: {self.retriever.search_kwargs}")
+
+        # # ChromaDBの情報を取得
+        # if hasattr(self.retriever, '_collection'):
+        #     print(f"Collection name: {self.retriever._collection.name}")
+        #     print(f"Total documents: {self.retriever._collection.count()}")
 
     def print_retrieved_documents(self, docs):
-        """検索されたドキュメントの情報を表示"""
-        print("\n=== 検索されたドキュメント ===")
-        for i, doc in enumerate(docs, 1):
-            print(f"\nドキュメント {i}:")
-            print(f"内容: {doc.page_content[:200]}...")  # 最初の200文字のみ表示
-            print(f"メタデータ: {doc.metadata}")
-            try:
-                print(f"類似度スコア: {doc.similarity}")  # もし利用可能な場合
-            except:
-                pass        
+        return
+        # """検索されたドキュメントの情報を表示"""
+        # print("\n=== 検索されたドキュメント ===")
+        # for i, doc in enumerate(docs, 1):
+        #     print(f"\nドキュメント {i}:")
+        #     print(f"内容: {doc.page_content[:200]}...")  # 最初の200文字のみ表示
+        #     print(f"メタデータ: {doc.metadata}")
+        #     try:
+        #         print(f"類似度スコア: {doc.similarity}")  # もし利用可能な場合
+        #     except:
+        #         pass        
 
     def interact_with_user(self):
         self.print_retriever_info()

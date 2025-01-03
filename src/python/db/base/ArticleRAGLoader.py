@@ -29,18 +29,19 @@ class ArticleRAGLoader:
         FROM {self.schema_name}.article_header h
         JOIN {self.schema_name}.article_contents c
         ON h.article_id = c.article_id
-        WHERE h.article_date between '20231211' and '20240131'
         """
 
+        #WHERE h.article_date between '20231211' and '20231211' デバッグ用
+
         # 日付範囲の条件を追加
-        # conditions = []
-        # if start_date:
-        #     conditions.append(f"h.article_date >= '{start_date.strftime('%Y%m%d')}'")
-        # if end_date:
-        #     conditions.append(f"h.article_date <= '{end_date.strftime('%Y%m%d')}'")
+        conditions = []
+        if start_date:
+            conditions.append(f"h.article_date >= '{start_date.strftime('%Y%m%d')}'")
+        if end_date:
+            conditions.append(f"h.article_date <= '{end_date.strftime('%Y%m%d')}'")
             
-        # if conditions:
-        #     query_str += " WHERE " + " AND ".join(conditions)
+        if conditions:
+            query_str += " WHERE " + " AND ".join(conditions)
             
         # ORDER BY句を追加
         query_str += """

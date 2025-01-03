@@ -16,7 +16,7 @@ class RagExecutor:
     def initialize_rag(persist_dir: str = "chroma_db"):
         # RAGシステムを初期化して保存
         retriever = SingletonRetriever(
-            "sentence-transformers/all-MiniLM-L6-v2",
+            PropertyManager().embedding_model_name,
             ArticleRAGLoader("articleschema").setup_tables()
         )
         
@@ -28,7 +28,14 @@ class RagExecutor:
     def load_saved_rag(persist_dir: str = manager.persist_dir):
         # 保存されたRAGシステムを読み込む
         persistence_handler = RAGPersistenceHandler(persist_dir)
-        return persistence_handler.load_rag_system("sentence-transformers/all-MiniLM-L6-v2")
+        retriever = persistence_handler.load_rag_system(
+            embedding_model_name=PropertyManager().embedding_model_name
+        )
+        
+        if retriever is None:
+            raise ValueError("No saved RAG system found")
+            
+        return retriever
     
     @staticmethod
     def update_rag(persist_dir: str = manager.persist_dir, from_date: str = None, to_date: str = None):
@@ -55,9 +62,6 @@ class RagExecutor:
 
             # RAGPersistenceHandlerを使用して既存のデータベースに追加
             persistence_handler = RAGPersistenceHandler(persist_dir)
-            if persistence_handler.load_rag_system(RagExecutor.MODEL_NAME) is None:
-                raise ValueError("No existing RAG system found")
-
             persistence_handler.add_documents(new_documents)
             
         except ValueError as ve:

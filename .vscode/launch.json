@@ -39,9 +39,9 @@
                 "--persist-dir",
                 "D:\\work\\git\\LangChainLab\\data", // --persist-dir‚ÌŒã‚É‘±‚­•¶Žš—ñ
                 "--from-date",
-                "20240201',
+                "20231212",
                 "--to-date",
-                "20240331',
+                "20231231",
             ]
         }
     ]

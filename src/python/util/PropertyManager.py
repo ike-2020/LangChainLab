@@ -32,6 +32,14 @@ class PropertyManager:
             return select_keyword
         return ''
 
+    @property
+    def embedding_model_name(self):
+        embedding_model_name = self._get_property("Paths", "embedding_model_name")
+        if embedding_model_name:
+            return embedding_model_name
+        return ''   
+    
+
     def _get_property(self, section, option):
         config = configparser.ConfigParser()
         try:

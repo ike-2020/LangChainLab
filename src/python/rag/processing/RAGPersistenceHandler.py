@@ -1,30 +1,40 @@
 from pathlib import Path
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from typing import Optional
-
+import chromadb
 from rag.document.SingletonRetriever import SingletonRetriever
+from util.PropertyManager import PropertyManager
 
 class RAGPersistenceHandler:
     def __init__(self, persist_directory: str = "chroma_db"):
         self.persist_directory = persist_directory
         Path(persist_directory).mkdir(parents=True, exist_ok=True)
+        # ChromaDBクライアントの初期化
+        self.client = chromadb.PersistentClient(path=persist_directory)
+        self.propetymanager = PropertyManager()
         
     def save_rag_system(self, retriever_instance: SingletonRetriever) -> None:
         """Save the RAG system to disk"""
         # ChromaDBに永続化
         db = Chroma(
+            client=self.client,
             embedding_function=retriever_instance.embeddings,
-            persist_directory=self.persist_directory
         )
         
-        batch_size = 5000  # 必要に応じて調整
-        for i in range(0, len(retriever_instance.chunked_documents), batch_size):
-            batch = retriever_instance.chunked_documents[i:i + batch_size]
+        # documentsを直接参照
+        if not hasattr(retriever_instance, 'documents') or not retriever_instance.documents:
+            print("No documents to save")
+            return
+            
+        batch_size = 5000
+        total_docs = len(retriever_instance.documents)
+
+        for i in range(0, total_docs, batch_size):
+            batch = retriever_instance.documents[i:i + batch_size]
+            print(f"Saving batch {i//batch_size + 1}: documents {i} to {min(i + batch_size, total_docs)}")
             db.add_documents(batch)
-        db.persist()
-        
-        print(f"RAG system saved to {self.persist_directory}")
+           
     
     def load_rag_system(self, embedding_model_name: str) -> Optional[SingletonRetriever]:
         """Load the RAG system from disk"""
@@ -37,41 +47,37 @@ class RAGPersistenceHandler:
         
         # 保存されたChromaDBを読み込む
         db = Chroma(
+            client=self.client,
             embedding_function=embeddings,
-            persist_directory=self.persist_directory
         )
         
         # SingletonRetrieverのインスタンスを作成
         retriever = SingletonRetriever.__new__(SingletonRetriever)
-        #retriever = SingletonRetriever.get_retriever()
         retriever._initialized = True
         retriever.embeddings = embeddings
-
-
-        retriever.chunked_documents = db.get()
-        if not retriever.chunked_documents:
-            print("Warning: No documents found in the database")
-            retriever.chunked_documents = []
-            
+        
         # retrieverの設定
-        #retriever.retriever = db.as_retriever()
         retriever.set_retriever(db.as_retriever())
-        
-        print("RAG system loaded successfully")
         return retriever
-        
+    
     def add_documents(self, documents: list) -> None:
         """Add new documents to the existing Chroma database"""
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        embeddings = HuggingFaceEmbeddings(model_name=self.propetymanager.embedding_model_name)
         db = Chroma(
+            client=self.client,
             embedding_function=embeddings,
-            persist_directory=self.persist_directory
         )
         
         # バッチサイズに分けて追加
-        batch_size = 5000  # save_rag_systemと同じバッチサイズを使用
-        for i in range(0, len(documents), batch_size):
-            batch = documents[i:i + batch_size]
+        batch_size = 1000
+        total_docs = len(documents)
+        
+        print(f"Adding {total_docs} documents to ChromaDB")
+        
+        #chromadb.PersistentClient(path=persist_directory)で、ローカルファイルから読み込んだ変数をバインドしたdbオブジェクトにaddしているため、save_rag_systemは不要
+        for i in range(0, total_docs, batch_size):
+            end_idx = min(i + batch_size, total_docs)
+            batch = documents[i:end_idx]
+            print(f"Processing documents {i+1} to {end_idx} of {total_docs}")
             db.add_documents(batch)
         
-        db.persist()
