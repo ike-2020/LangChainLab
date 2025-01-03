@@ -59,3 +59,19 @@ class RAGPersistenceHandler:
         
         print("RAG system loaded successfully")
         return retriever
+        
+    def add_documents(self, documents: list) -> None:
+        """Add new documents to the existing Chroma database"""
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        db = Chroma(
+            embedding_function=embeddings,
+            persist_directory=self.persist_directory
+        )
+        
+        # バッチサイズに分けて追加
+        batch_size = 5000  # save_rag_systemと同じバッチサイズを使用
+        for i in range(0, len(documents), batch_size):
+            batch = documents[i:i + batch_size]
+            db.add_documents(batch)
+        
+        db.persist()

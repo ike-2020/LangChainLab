@@ -25,6 +25,12 @@ class PropertyManager:
             return persist_dir
         return ''
 
+    @property
+    def select_keyword(self):
+        select_keyword = self._get_property("Paths", "select_keyword")
+        if select_keyword:
+            return select_keyword
+        return ''
 
     def _get_property(self, section, option):
         config = configparser.ConfigParser()

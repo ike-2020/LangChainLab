@@ -26,6 +26,23 @@
                 "--persist-dir",
                 "D:\\work\\git\\LangChainLab\\data" // --persist-dir‚ÌŒã‚É‘±‚­•¶Žš—ñ
             ]
+        },
+        {
+            "name": "Argument Update",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--mode",
+                "update", // --mode‚ÌŒã‚É‘±‚­•¶Žš—ñ
+                "--persist-dir",
+                "D:\\work\\git\\LangChainLab\\data", // --persist-dir‚ÌŒã‚É‘±‚­•¶Žš—ñ
+                "--from-date",
+                "20240201',
+                "--to-date",
+                "20240331',
+            ]
         }
     ]
 }
